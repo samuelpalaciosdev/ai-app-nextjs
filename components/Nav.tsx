@@ -1,7 +1,11 @@
 import Link from 'next/link';
-import { Button } from './ui/Button';
+import SignInButton from './SignInButton';
+import { getAuthSession } from '@/lib/auth';
+import UserDropdown from './UserDropdown';
 
-export default function Nav() {
+export default async function Nav() {
+  const session = await getAuthSession();
+  console.log(session?.user);
   return (
     <nav className='fixed inset-x-0 top-0 h-fit py-2 bg-white dark:bg-gray-950 z-[10] border-b border-zinc-300'>
       <div className='container mx-auto max-w-7xl flex items-center justify-between gap-2'>
@@ -12,9 +16,16 @@ export default function Nav() {
         >
           Quizzuh
         </Link>
-
-        {/* Sign in button */}
-        <Button>Sign in</Button>
+        <ul className='flex items-center gap-2'>
+          {/* Sign in button or profile pic */}
+          {session?.user ? (
+            <UserDropdown user={session.user} />
+          ) : (
+            <li>
+              <SignInButton text='Sign in' />
+            </li>
+          )}
+        </ul>
       </div>
     </nav>
   );
