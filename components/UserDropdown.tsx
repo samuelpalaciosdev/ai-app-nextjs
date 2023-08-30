@@ -1,7 +1,7 @@
 'use client';
 
 import type { User } from 'next-auth';
-import React from 'react';
+import { signOut } from 'next-auth/react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
 import Image from 'next/image';
+import { LuLogOut } from 'react-icons/lu';
+import UserAvatar from './UserAvatar';
 
 type Props = {
   user: Pick<User, 'name' | 'image' | 'email'>;
@@ -21,13 +22,8 @@ const UserAccountNav = ({ user }: Props) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Image
-          src={user.image as string}
-          alt={user.name as string}
-          width={36}
-          height={36}
-          className='rounded-full'
-        />
+        {/* User image */}
+        <UserAvatar user={user} />
       </DropdownMenuTrigger>
       <DropdownMenuContent className='bg-white' align='end'>
         <div className='flex items-center justify-start gap-2 p-2'>
@@ -57,6 +53,7 @@ const UserAccountNav = ({ user }: Props) => {
           className='cursor-pointer'
         >
           Sign out
+          <LuLogOut className='w-4 h-4 ml-2' />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
