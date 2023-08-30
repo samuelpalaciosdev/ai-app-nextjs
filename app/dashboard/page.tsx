@@ -1,4 +1,7 @@
-import QuizMeCard from '@/components/QuizMeCard';
+import HistoryCard from '@/components/dashboard/HistoryCard';
+import HotTopicsCard from '@/components/dashboard/HotTopicsCard';
+import QuizMeCard from '@/components/dashboard/QuizMeCard';
+import RecentActivities from '@/components/dashboard/RecentActivities';
 import { getAuthSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
@@ -20,9 +23,12 @@ export default async function Dashboard() {
       </div>
       <div className='grid mt-6 gap-4 md:grid-cols-2'>
         <QuizMeCard />
-        {/* <HistoryCard /> */}
+        <HistoryCard />
       </div>
-      <div className='grid mt-4 gap-4 md:grid-cols-4 lg:grid-cols-7'></div>
+      <div className='grid mt-4 gap-4 md:grid-cols-2 lg:grid-cols-7'>
+        <HotTopicsCard />
+        <RecentActivities />
+      </div>
     </div>
   );
 }
