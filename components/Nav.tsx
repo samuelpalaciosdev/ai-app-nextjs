@@ -2,6 +2,7 @@ import Link from 'next/link';
 import SignInButton from './SignInButton';
 import { getAuthSession } from '@/lib/auth';
 import UserDropdown from './UserDropdown';
+import { ThemeToggle } from './ThemeToggle';
 
 export default async function Nav() {
   const session = await getAuthSession();
@@ -16,16 +17,17 @@ export default async function Nav() {
         >
           Quizzuh
         </Link>
-        <ul className='flex items-center gap-2'>
-          {/* Sign in button or profile pic */}
-          {session?.user ? (
-            <UserDropdown user={session.user} />
-          ) : (
-            <li>
+        <div className='flex items-center'>
+          <ThemeToggle className='mr-4' />
+          <div className='flex items-center gap-2'>
+            {/* Sign in button or profile pic */}
+            {session?.user ? (
+              <UserDropdown user={session.user} />
+            ) : (
               <SignInButton text='Sign in' />
-            </li>
-          )}
-        </ul>
+            )}
+          </div>
+        </div>
       </div>
     </nav>
   );
