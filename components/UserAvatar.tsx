@@ -1,5 +1,5 @@
 import { User } from 'next-auth';
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback } from './ui/avatar';
 import Image from 'next/image';
 
 type UserAvatarProps = {
@@ -11,8 +11,10 @@ export default function UserAvatar({ user }: UserAvatarProps) {
     <Avatar>
       {user.image ? (
         <div className='relative w-full h-full aspect-square'>
-          <AvatarImage
+          <Image
             src={user.image}
+            alt='Profile picture'
+            className='rounded-full'
             width={36}
             height={36}
             referrerPolicy='no-referrer'
