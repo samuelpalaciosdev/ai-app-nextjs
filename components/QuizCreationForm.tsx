@@ -24,10 +24,26 @@ import { Input } from '@/components/ui/input';
 import { Button } from './ui/Button';
 import { LuBookOpen, LuCopyCheck } from 'react-icons/lu';
 import { Separator } from './ui/separator';
+import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 type Input = z.infer<typeof quizSchema>;
 
 export default function QuizCreationForm() {
+  const router = useRouter();
+
+  const { mutate: getQuestions, isLoading } = useMutation({
+    mutationFn: async ({ amount, topic, type }: Input) => {
+      const res = await axios.post('/api/game', {
+        amount,
+        topic,
+        type,
+      });
+      return res.data;
+    },
+  });
+
   const form = useForm<Input>({
     resolver: zodResolver(quizSchema),
     defaultValues: {
@@ -38,7 +54,22 @@ export default function QuizCreationForm() {
   });
 
   const onSubmit = (values: Input) => {
-    console.log(values);
+    getQuestions(
+      {
+        amount: values.amount,
+        topic: values.topic,
+        type: values.type,
+      },
+      {
+        onSuccess: ({ gameId }) => {
+          if (form.getValues('type') === 'open_ended') {
+            router.push(`/play/open-ended/${gameId}`);
+          } else {
+            router.push(`/play/mcq/${gameId}`);
+          }
+        },
+      }
+    );
   };
 
   form.watch();
@@ -114,7 +145,7 @@ export default function QuizCreationForm() {
                   <LuCopyCheck className='w-4 h-4 mr-2' />
                   Multiple choice
                 </Button>
-                <Separator />
+                <Separator orientation='vertical' />
                 <Button
                   type='button'
                   onClick={() => {
@@ -130,7 +161,9 @@ export default function QuizCreationForm() {
                   Open ended
                 </Button>
               </div>
-              <Button type='submit'>Submit</Button>
+              <Button disabled={isLoading} type='submit'>
+                Submit
+              </Button>
             </form>
           </Form>
         </CardContent>
