@@ -1,4 +1,4 @@
-export default function OpenEndedGamePage() {
+export default async function OpenEndedGamePage() {
   return (
     <>
       <div className='container flex flex-col max-w-[64rem] mx-auto gap-4 text-center'>

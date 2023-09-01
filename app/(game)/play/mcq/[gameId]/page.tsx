@@ -1,11 +1,46 @@
-export default function McqGamePage() {
+import Mcq from '@/components/game/Mcq';
+import { getAuthSession } from '@/lib/auth';
+import { prisma } from '@/lib/db';
+import { redirect } from 'next/navigation';
+
+type McqGamePageProps = {
+  params: {
+    gameId: string;
+  };
+};
+
+export default async function McqGamePage({
+  params: { gameId },
+}: McqGamePageProps) {
+  const session = await getAuthSession();
+
+  if (!session?.user) {
+    return redirect('/');
+  }
+
+  const game = await prisma.game.findUnique({
+    where: {
+      id: gameId,
+    },
+    include: {
+      questions: {
+        select: {
+          id: true,
+          question: true,
+          options: true,
+        },
+      },
+    },
+  });
+
+  if (!game || game.gameType !== 'mcq') {
+    return redirect('/quiz');
+  }
+
   return (
     <>
       <div className='container flex flex-col max-w-[64rem] mx-auto gap-4 text-center'>
-        <h1 className='text-4xl lg:text-7xl font-semibold'>MCQ :)</h1>
-        <p className='max-w[42rem] text-muted-foreground sm:text-xl sm:leading-8'>
-          Here is the Mcq game page
-        </p>
+        <Mcq game={game} />
       </div>
     </>
   );
