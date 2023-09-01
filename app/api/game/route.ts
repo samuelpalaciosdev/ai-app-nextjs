@@ -24,7 +24,7 @@ export async function POST(req: Request, res: Response) {
       },
     });
 
-    const { data } = await axios.post(`${process.env.API_URL}/api/questions`, {
+    const { data } = await axios.post(`${process.env.API_URL}/api/quiztest`, {
       amount,
       topic,
       type,
